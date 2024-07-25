@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="_UOW\**" />
+    <EmbeddedResource Remove="_UOW\**" />
+    <None Remove="_UOW\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repositories\AuditLogRepository.cs" />
+    <Compile Remove="Repositories\DistrictRepository.cs" />
+    <Compile Remove="Repositories\DivisionRepository.cs" />
+    <Compile Remove="Repositories\ErrorLogRepository.cs" />
+    <Compile Remove="Repositories\HealthFacilityRepository.cs" />
+    <Compile Remove="Repositories\MenuRepository.cs" />
+    <Compile Remove="Repositories\ProfileRepository.cs" />
+    <Compile Remove="Repositories\ProfileTypeRepository.cs" />
+    <Compile Remove="Repositories\RoleMenuRepository.cs" />
+    <Compile Remove="Repositories\RoleRepository.cs" />
+    <Compile Remove="Repositories\TehsilRepository.cs" />
+    <Compile Remove="Repositories\UserLogRepository.cs" />
+    <Compile Remove="Repositories\UserRoleRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\DbModels\" />
+  </ItemGroup>
+
+</Project>
