@@ -1,18 +1,18 @@
-﻿using AuthDAL.Models.DbModels;
-using AuthDAL.Repositories.UOW;
+﻿using Auth.DAL.Models.DbModels;
+using Auth.DAL.Repositories.UOW;
 using CommonDTOs.Enums;
 using CommonExceptionHandler;
 using CommonMessages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace AuthDAL.Repositories
+namespace Auth.DAL.Repositories
 {
     public class UserRepository<TEntity> where TEntity : class
     {
         #region Class Fields & Propertities
 
-        private readonly HmisAuthContext _dbContext;
+        private readonly AdvancedLearningSystemDbContext _dbContext;
         private readonly UnitOfWork<User> _uowUser;
 
 
@@ -20,7 +20,7 @@ namespace AuthDAL.Repositories
 
         #region Constructor
 
-        public UserRepository(HmisAuthContext dbContext, UnitOfWork<User> uowUser)
+        public UserRepository(AdvancedLearningSystemDbContext dbContext, UnitOfWork<User> uowUser)
         {
             _dbContext = dbContext;
             _uowUser = uowUser;
@@ -74,19 +74,19 @@ namespace AuthDAL.Repositories
             return obj;
         }
 
-        public async Task<User?> GetByCnic(string cnic)
-        {
-            using var _uowUser = new UnitOfWork<User>();
-            var obj = await _uowUser.Repository.GetALL(x => x.Cnic == cnic).Where(x => x.ActionTypeId != (int)ActionTypeEnum.Deleted).Include(x => x.UserRoles).FirstOrDefaultAsync();
-            return obj;
-        }
+        //public async Task<User?> GetByCnic(string cnic)
+        //{
+        //    using var _uowUser = new UnitOfWork<User>();
+        //    var obj = await _uowUser.Repository.GetALL(x => x.Cnic == cnic).Where(x => x.ActionTypeId != (int)ActionTypeEnum.Deleted).Include(x => x.UserRoles).FirstOrDefaultAsync();
+        //    return obj;
+        //}
 
-        public async Task<User?> GetByIdWithUserRoleDetails(object Id)
-        {
-            using var _uowRole = new UnitOfWork<User>();
-            var obj = await _uowRole.Repository.GetALL(x => x.UserId.ToString() == Id.ToString()).Include(x => x.UserRoles).FirstOrDefaultAsync();
-            return obj;
-        }
+        //public async Task<User?> GetByIdWithUserRoleDetails(object Id)
+        //{
+        //    using var _uowRole = new UnitOfWork<User>();
+        //    var obj = await _uowRole.Repository.GetALL(x => x.UserId.ToString() == Id.ToString()).Include(x => x.UserRoles).FirstOrDefaultAsync();
+        //    return obj;
+        //}
 
         #endregion
 

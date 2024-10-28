@@ -1,4 +1,4 @@
-﻿using AuthDAL.Repositories.UOW;
+﻿using Auth.DAL.Repositories.UOW;
 using DTOs.UserDTO;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthDAL.Repositories
+namespace Auth.DAL.Repositories
 {
     public class AuthRespository
     {

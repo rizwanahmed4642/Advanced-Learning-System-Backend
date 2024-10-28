@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace DAL.Repositories._UOW
+namespace Auth.DAL.Repositories._UOW
 {
     
     public class GenericRepository<TEntity> where TEntity : class

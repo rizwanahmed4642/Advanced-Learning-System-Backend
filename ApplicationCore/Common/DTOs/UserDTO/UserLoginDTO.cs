@@ -10,10 +10,10 @@ namespace DTOs.UserDTO
     public class UserLoginDTO
     {
         public string? Email { get; set; }
+        [Required]
         public string? Username { get; set; }
 
-        [Required]
-        public string? CNIC { get; set; }
+       
         [Required]
         public string? Password { get; set; }
     }

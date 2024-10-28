@@ -47,4 +47,8 @@
     <Folder Include="Models\DbModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ApplicationCore\Common\CommonExceptionHandler\CommonExceptionHandler.csproj" />
+  </ItemGroup>
+
 </Project>

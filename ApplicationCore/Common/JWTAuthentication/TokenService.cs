@@ -188,15 +188,15 @@ namespace JWTAuthentication
         //    return false;
         //}
 
-        public static List<UserRoleDto?> UserRoles()
-        {
-            string userRoles = GetValueFromHeder(GetUserInfoConstant.UserRoles);
-            if (userRoles != null)
-            {
-                return JsonConvert.DeserializeObject<List<UserRoleDto>>(userRoles)!;
-            }
-            return null;
-        }
+        //public static List<UserRoleDto?> UserRoles()
+        //{
+        //    string userRoles = GetValueFromHeder(GetUserInfoConstant.UserRoles);
+        //    if (userRoles != null)
+        //    {
+        //        return JsonConvert.DeserializeObject<List<UserRoleDto>>(userRoles)!;
+        //    }
+        //    return null;
+        //}
 
         #endregion
 
@@ -236,24 +236,24 @@ namespace JWTAuthentication
                                 return userObj.UserId.ToString();
                             case GetUserInfoConstant.Email:
                                 return userObj?.Email?.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.SuperAdmin:
-                                return userObj?.IsSuperAdmin.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.SeniorDataProcessor:
-                                return userObj?.IsSeniorDataProcessor.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.Pmis:
-                                return userObj?.IsPMIS.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.UserRoles:
-                                return JsonConvert.SerializeObject(userObj.UserRoleList) ?? string.Empty;
-                            case GetUserInfoConstant.HealthFacilityId:
-                                return userObj.HealthFacilityId.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.HfHrId:
-                                return userObj.HfHrId.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.HealthFacilityCode:
-                                return userObj.HealthFacilityCode?.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.DivisionId:
-                                return userObj.DivisionId?.ToString() ?? string.Empty;
-                            case GetUserInfoConstant.MimsDepartmentId:
-                                return userObj.MimsDepartmentId?.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.SuperAdmin:
+                            //    return userObj?.IsSuperAdmin.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.SeniorDataProcessor:
+                            //    return userObj?.IsSeniorDataProcessor.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.Pmis:
+                            //    return userObj?.IsPMIS.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.UserRoles:
+                            //    return JsonConvert.SerializeObject(userObj.UserRoleList) ?? string.Empty;
+                            //case GetUserInfoConstant.HealthFacilityId:
+                            //    return userObj.HealthFacilityId.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.HfHrId:
+                            //    return userObj.HfHrId.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.HealthFacilityCode:
+                            //    return userObj.HealthFacilityCode?.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.DivisionId:
+                            //    return userObj.DivisionId?.ToString() ?? string.Empty;
+                            //case GetUserInfoConstant.MimsDepartmentId:
+                            //    return userObj.MimsDepartmentId?.ToString() ?? string.Empty;
                             default:
                                 return string.Empty;
                         }

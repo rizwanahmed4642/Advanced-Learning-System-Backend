@@ -1,14 +1,17 @@
-using AuthDAL.Repositories;
+using Auth.DAL.Repositories;
 using AutoMapper.Features;
 using AutoMapper;
-using DAL.Models.DbModels;
-using DAL.Repositories.UOW;
+using Auth.DAL.Models.DbModels;
+using Auth.DAL.Repositories.UOW;
 using FileHandler;
 using JWTAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Data;
 using System.Net.Mail;
+using BAL.Interface;
+using Auth.BAL.Service;
+using Auth.BAL.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +57,8 @@ options.UseSqlServer(
 builder.Services.TryAddScoped<AuthRespository>();
 builder.Services.TryAddScoped<UserRepository<User>>();
 builder.Services.TryAddScoped<HttpClient>();
+builder.Services.TryAddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.TryAddScoped<IUserService,UserService>();
 
 
 //*********** UOW Registered ************** //

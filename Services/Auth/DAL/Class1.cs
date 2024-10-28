@@ -1,4 +1,4 @@
-﻿namespace DAL
+﻿namespace Auth.DAL
 {
     public class Class1
     {

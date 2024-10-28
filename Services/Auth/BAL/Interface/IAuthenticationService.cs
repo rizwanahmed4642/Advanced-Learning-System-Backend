@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BAL.Interface
 {
-    public interface IAuthentication
+    public interface IAuthenticationService
     {
-        public async Task<UserLoggedInfoDTO> Authenticate(UserLoginDTO userLoginDTO);
+      public  Task<UserLoggedInfoDTO> Authenticate(UserLoginDTO userLoginDTO);
     }
 }

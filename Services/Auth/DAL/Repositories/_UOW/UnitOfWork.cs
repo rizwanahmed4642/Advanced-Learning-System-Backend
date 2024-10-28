@@ -1,5 +1,5 @@
-﻿using DAL.Models.DbModels;
-using DAL.Repositories._UOW;
+﻿using Auth.DAL.Models.DbModels;
+using Auth.DAL.Repositories._UOW;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Repositories.UOW
+namespace Auth.DAL.Repositories.UOW
 {
     public class UnitOfWork<T> : IDisposable where T : class
     {

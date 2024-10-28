@@ -13,7 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\ApplicationCore\Common\FileHandler\FileHandler.csproj" />
     <ProjectReference Include="..\..\..\ApplicationCore\Common\JWTAuthentication\JWTAuthentication.csproj" />
-    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\BAL\Auth.BAL.csproj" />
+    <ProjectReference Include="..\DAL\Auth.DAL.csproj" />
   </ItemGroup>
 
 </Project>
