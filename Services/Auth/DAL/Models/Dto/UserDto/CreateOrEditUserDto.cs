@@ -15,8 +15,6 @@ namespace Auth.DAL.Models.Dto.UserDto
 
         public string? Password { get; set; }
 
-        public bool? IsActive { get; set; }
-
-        //public virtual ICollection<CreateOrEditUserRoleDto> UserRoles { get; set; } = new List<CreateOrEditUserRoleDto>();
+        public List<CreateOrEditUserRoleDto> UserRoles { get; set; } = new List<CreateOrEditUserRoleDto>();
     }
 }

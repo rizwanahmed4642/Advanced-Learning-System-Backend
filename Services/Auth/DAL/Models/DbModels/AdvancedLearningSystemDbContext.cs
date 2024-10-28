@@ -15,6 +15,10 @@ public partial class AdvancedLearningSystemDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Profile> Profiles { get; set; }
+
+    public virtual DbSet<ProfileType> ProfileTypes { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -23,10 +27,42 @@ public partial class AdvancedLearningSystemDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-A5QIPL1;Database=Advanced-Learning-System-db;Persist Security Info=False;Integrated Security=True;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-Q6CNJVS\\SQLEXPRESS;Database=Advanced-Learning-System-db;Integrated Security=True;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Profile>(entity =>
+        {
+            entity.ToTable("Profile");
+
+            entity.Property(e => e.ProfileId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DeletedOn).HasColumnType("datetime");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Name).HasMaxLength(150);
+            entity.Property(e => e.ShortName).HasMaxLength(150);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ProfileType).WithMany(p => p.Profiles)
+                .HasForeignKey(d => d.ProfileTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Profile_ProfileType");
+        });
+
+        modelBuilder.Entity<ProfileType>(entity =>
+        {
+            entity.ToTable("ProfileType");
+
+            entity.Property(e => e.ProfileTypeId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DeletedOn).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(150);
+            entity.Property(e => e.ShortName).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<Role>(entity =>
         {
             entity.Property(e => e.RoleId).ValueGeneratedNever();

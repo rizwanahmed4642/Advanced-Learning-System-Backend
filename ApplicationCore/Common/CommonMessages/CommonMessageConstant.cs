@@ -92,6 +92,7 @@ namespace CommonMessages
         public const string UsernameNotFound = "Username Not Found";
         public const string CnicNotFound = "CNIC Not Found";
         public const string UserNotFound = "User Not Found";
+        public const string UserRoleNotFound = "User cannot be created without a role.";
         public const string EmailNotFound = "Email Not Found";
         public const string CNICNotFound = "CNIC # Not Found!";
         public const string IncorrectPassword = "Incorrect Password!";

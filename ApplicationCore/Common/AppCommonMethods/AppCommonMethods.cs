@@ -74,6 +74,14 @@ namespace AppCommonMethods
                 return false;
         }
 
+        public static bool IsNullOrEmptyList<T>(ICollection<T> list)
+        {
+            if (list == null || !list.Any())
+                return true;
+            else
+                return false;
+        }
+
         public static bool IsNullBool(bool? value)
         {
             if (value == null)

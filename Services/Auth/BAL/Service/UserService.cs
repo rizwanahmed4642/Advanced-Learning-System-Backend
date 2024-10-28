@@ -80,13 +80,24 @@ namespace Auth.BAL.Service
             var obj = _mapper.Map<User>(input);
             obj.Username = input.Username;
 
-           
-           
+            if (AppCommonMethod.IsNullOrEmptyList<UserRole>(obj.UserRoles))
+            {
+                throw new UserFriendlyException(CommonMessageConstant.UserRoleNotFound);
+            }
+            await FillUserEntity(obj);
 
-            await FillEntity(obj);
+            foreach (var item in obj.UserRoles)
+            {
+                item.IsActive = true;
+                item.CreatedOn = obj.CreatedOn;
+                //item.CreatedBy = _tokenService.GetUserId();
+                item.ActionTypeId = (int)ActionTypeEnum.Create;
+            }
+            
 
             User responseObj = await _uowUser.Repository.Insert(obj);
-            await _uowUser.Save();
+            await _uowUser.CommitAsync();
+            
             return _mapper.Map<CreateOrEditUserDto>(responseObj);
         }
 
@@ -118,7 +129,7 @@ namespace Auth.BAL.Service
                     dbObj.Username = input.Username;                 
                     dbObj.Email = input.Email;
                     dbObj.Password = input.Password;
-                    dbObj.IsActive = input.IsActive;
+                    //dbObj.IsActive = input.IsActive;
                     dbObj.UpdatedBy = _tokenService.GetUserId();
                     dbObj.UpdatedOn = DateTime.Now;
                     dbObj.ActionTypeId = (int)ActionTypeEnum.Edit;
@@ -167,15 +178,16 @@ namespace Auth.BAL.Service
         #endregion
         #region Helper Methods
 
-        private async Task FillEntity(User obj)
+        private async Task FillUserEntity(User obj)
         {
             //var userRoleDbList = await _UserRepository.GetALL(x => x.UserId == obj.UserId);
             if (obj.Id == null || obj.Id == Guid.Empty)
             {
                 obj.Id = Guid.NewGuid();
-                obj.CreatedBy = _tokenService.GetUserId();
+                //obj.CreatedBy = _tokenService.GetUserId();
                 obj.CreatedOn = DateTime.Now;
                 obj.ActionTypeId = (int)ActionTypeEnum.Create;
+                obj.IsActive = true;
             }
             else
             {
@@ -206,6 +218,7 @@ namespace Auth.BAL.Service
             //}
 
         }
+
         //private void FillEntityDelete(User obj)
         //{
         //    if (obj != null)

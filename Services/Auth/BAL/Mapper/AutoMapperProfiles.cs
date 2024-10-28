@@ -17,7 +17,8 @@ namespace AuthDAL
             public UserProfile()
             {
                 CreateMap<User, CreateOrEditUserDto>().ReverseMap();
-           
+                CreateMap<UserRole, CreateOrEditUserRoleDto>().ReverseMap();
+
             }
         }
 
