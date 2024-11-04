@@ -59,10 +59,11 @@ builder.Services.TryAddScoped<UserRepository<User>>();
 builder.Services.TryAddScoped<HttpClient>();
 builder.Services.TryAddScoped<IAuthenticationService,AuthenticationService>();
 builder.Services.TryAddScoped<IUserService,UserService>();
-
+builder.Services.AddScoped<IProfileService, ProfilesService>();
 
 //*********** UOW Registered ************** //
 builder.Services.TryAddScoped<UnitOfWork<User>>();
+builder.Services.TryAddScoped<UnitOfWork<Auth.DAL.Models.DbModels.Profile>>();
 #endregion
 
 builder.Services.AddControllers();
