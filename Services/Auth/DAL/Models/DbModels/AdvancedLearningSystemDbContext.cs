@@ -92,9 +92,7 @@ public partial class AdvancedLearningSystemDbContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.PhoneNo).HasMaxLength(20);
             entity.Property(e => e.RollNo).HasMaxLength(100);
-            entity.Property(e => e.Section).HasMaxLength(100);
-            entity.Property(e => e.StudentClass).HasMaxLength(100);
-            entity.Property(e => e.StudentPhotoName).HasMaxLength(200);
+            entity.Property(e => e.StudentPhotoBase64).HasMaxLength(200);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 

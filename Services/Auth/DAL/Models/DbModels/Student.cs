@@ -15,9 +15,9 @@ public partial class Student
 
     public Guid ReligionTypeProfileId { get; set; }
 
-    public string StudentClass { get; set; } = null!;
+    public Guid StudentClassTypeProfileId { get; set; }
 
-    public string Section { get; set; } = null!;
+    public Guid StudentClassSectionTypeProfileId { get; set; }
 
     public string? AdmissionId { get; set; }
 
@@ -25,7 +25,7 @@ public partial class Student
 
     public string? ShortBio { get; set; }
 
-    public string StudentPhotoName { get; set; } = null!;
+    public string? StudentPhotoBase64 { get; set; }
 
     public bool? IsActive { get; set; }
 

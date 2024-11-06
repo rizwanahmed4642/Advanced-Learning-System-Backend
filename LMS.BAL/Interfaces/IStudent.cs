@@ -10,5 +10,6 @@ namespace LMS.BAL.Interfaces
     public interface IStudent
     {
         Task<CreateOrEditStudent> CreateOrEditStudentCreate(CreateOrEditStudent input);
+        Task<List<GetAllStudentsDto>> GetAllStudents(string searchTerm = null);
     }
 }

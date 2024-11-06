@@ -26,7 +26,16 @@ namespace LMS.Api.Controllers
         #endregion
 
         #region GET
+        [HttpGet("GetAllStudents")]
+        public async Task<IActionResult> GetAllStudents([FromQuery] string? SearchTerm) 
+        {
+            var list = await student.GetAllStudents();
 
+            return Ok(new ResponseSuccess
+            {
+                data = list
+            });
+        }
         #endregion
 
         #region POST

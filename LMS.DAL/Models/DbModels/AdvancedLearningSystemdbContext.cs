@@ -117,10 +117,6 @@ namespace LMS.DAL.Models.DbModels
 
                 entity.Property(e => e.RollNo).HasMaxLength(100);
 
-                entity.Property(e => e.Section).HasMaxLength(100);
-
-                entity.Property(e => e.StudentClass).HasMaxLength(100);
-
                 entity.Property(e => e.StudentPhotoBase64).HasMaxLength(200);
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");

@@ -9,9 +9,11 @@ using LMS.BAL.Interfaces;
 using LMS.DAL.Models.DbModels;
 using LMS.DAL.Models.Dto.Student;
 using LMS.DAL.Repositories._UOW;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,74 +52,113 @@ namespace LMS.BAL.Services
         #endregion
 
         #region GET
+        public async Task<List<GetAllStudentsDto>> GetAllStudents(string searchTerm)
+        {
+            using (var db = new AdvancedLearningSystemdbContext())
+            {
+                var conn = _uowStudent.GetDbContext().Database.GetDbConnection();
+                try
+                {
 
+                    DataSet ds = new DataSet();
+                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
+                    sqlComm.CommandType = CommandType.StoredProcedure;
+                    sqlComm.Parameters.AddWithValue("@Type", "GETALL");
+                    sqlComm.Parameters.AddWithValue("@searchTerm", searchTerm);
+
+                    SqlDataAdapter da = new SqlDataAdapter();
+                    da.SelectCommand = sqlComm;
+                    await Task.Run(() => da.Fill(ds));
+                    List<GetAllStudentsDto> lst = ds.Tables[0].ToList<GetAllStudentsDto>();
+
+
+
+                    return lst;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
         #endregion
 
         #region Helper Method
         private async Task<CreateOrEditStudent> Create(CreateOrEditStudent input)
         {
-            var unitOfWorkUser = new UnitOfWork<User>();
-            var unitOfWorkUserRole = new UnitOfWork<UserRole>();
-
-            // Map and fill user entity
-            var user = _mapper.Map<User>(input);
-            FillByEntityUser(user);
-
-            // Map and fill student entity
-            var student = _mapper.Map<Student>(input.StudentCreateOrEditDto);
-            FillByEntityStudent(student);
-
-            // Insert user
-            var userInsert = unitOfWorkUser.Repository.Insert(user);
-            if (userInsert == null)
+            try
             {
-                throw new UserFriendlyException("Failed to add user.");
+                var unitOfWorkUser = new UnitOfWork<User>();
+                var unitOfWorkUserRole = new UnitOfWork<UserRole>();
+
+                // Map and fill user entity
+                var user = _mapper.Map<User>(input);
+                FillByEntityUser(user);
+
+                // Map and fill student entity
+                var student = _mapper.Map<Student>(input.StudentCreateOrEditDto);
+                FillByEntityStudent(student);
+
+                // Insert user
+                var userInsert = unitOfWorkUser.Repository.Insert(user);
+                if (userInsert == null)
+                {
+                    throw new UserFriendlyException("Failed to add user.");
+                }
+
+                // Set UserId for student
+                student.UserId = user.Id;
+
+                // Insert student
+                var studentInsert = _uowStudent.Repository.Insert(student);
+                if (studentInsert == null)
+                {
+                    throw new UserFriendlyException("Failed to add student.");
+                }
+
+                // Find role for user
+                var userRole = await unitOfWorkUserRole.GetDbContext().Roles
+                    .Where(x => x.ShortName!.ToLower() == input.RoleShortName!.ToLower())
+                    .FirstOrDefaultAsync();
+
+                if (userRole == null)
+                {
+                    throw new UserFriendlyException("Role not found.");
+                }
+
+                // Create new user role
+                var newUserRole = new UserRole
+                {
+                    UserId = (Guid)user.Id,
+                    RoleId = userRole.RoleId,
+                    IsActive = true,
+                    CreatedBy = _tokenService.GetUserId(),
+                    CreatedOn = DateTime.Now,
+                    ActionTypeId = (int)ActionTypeEnum.Create
+                };
+
+                // Insert user role
+                var insertUserRole = unitOfWorkUserRole.Repository.Insert(newUserRole);
+                if (insertUserRole == null)
+                {
+                    throw new UserFriendlyException("Failed to assign role to user.");
+                }
+
+                // Commit all changes in a transaction
+                await unitOfWorkUser.CommitAsync();
+                await _uowStudent.CommitAsync();
+                await unitOfWorkUserRole.CommitAsync(); // Ensure to commit roles as well
+
+                return input;
             }
-
-            // Set UserId for student
-            student.UserId = user.Id;
-
-            // Insert student
-            var studentInsert = _uowStudent.Repository.Insert(student);
-            if (studentInsert == null)
+            catch (Exception ex)
             {
-                throw new UserFriendlyException("Failed to add student.");
+                throw new Exception(ex.InnerException.Message);
             }
-
-            // Find role for user
-            var userRole = await unitOfWorkUserRole.GetDbContext().Roles
-                .Where(x => x.ShortName!.ToLower() == input.RoleShortName!.ToLower())
-                .FirstOrDefaultAsync();
-
-            if (userRole == null)
-            {
-                throw new UserFriendlyException("Role not found.");
-            }
-
-            // Create new user role
-            var newUserRole = new UserRole
-            {
-                UserId = (Guid)user.Id,
-                RoleId = userRole.RoleId,
-                IsActive = true,
-                CreatedBy = _tokenService.GetUserId(),
-                CreatedOn = DateTime.Now,
-                ActionTypeId = (int)ActionTypeEnum.Create
-            };
-
-            // Insert user role
-            var insertUserRole = unitOfWorkUserRole.Repository.Insert(newUserRole);
-            if (insertUserRole == null)
-            {
-                throw new UserFriendlyException("Failed to assign role to user.");
-            }
-
-            // Commit all changes in a transaction
-            await unitOfWorkUser.CommitAsync();
-            await _uowStudent.CommitAsync();
-            await unitOfWorkUserRole.CommitAsync(); // Ensure to commit roles as well
-
-            return input;
         }
 
         private Task<CreateOrEditStudent> Update(CreateOrEditStudent input)

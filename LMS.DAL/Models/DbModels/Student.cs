@@ -10,12 +10,12 @@ namespace LMS.DAL.Models.DbModels
         public string RollNo { get; set; } = null!;
         public Guid BloodGroupTypeProfileId { get; set; }
         public Guid ReligionTypeProfileId { get; set; }
-        public string StudentClass { get; set; } = null!;
-        public string Section { get; set; } = null!;
+        public Guid StudentClassTypeProfileId { get; set; }
+        public Guid StudentClassSectionTypeProfileId { get; set; }
         public string? AdmissionId { get; set; }
         public string? PhoneNo { get; set; }
         public string? ShortBio { get; set; }
-        public string StudentPhotoBase64 { get; set; } = null!;
+        public string? StudentPhotoBase64 { get; set; }
         public bool? IsActive { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }

@@ -22,10 +22,10 @@ namespace LMS.DAL.Models.Dto.Student
     {
         public Guid? StudentId { get; set; }
         public string RollNo { get; set; } = null!;
-        public Guid? BloodGroupTypeProfileId { get; set; }
-        public Guid? ReligionTypeProfileId { get; set; }
-        public string StudentClass { get; set; } = null!;
-        public string Section { get; set; } = null!;
+        public Guid BloodGroupTypeProfileId { get; set; }
+        public Guid ReligionTypeProfileId { get; set; }
+        public Guid StudentClassTypeProfileId { get; set; }
+        public Guid StudentClassSectionTypeProfileId { get; set; }
         public string? AdmissionId { get; set; }
         public string? PhoneNo { get; set; }
         public string? ShortBio { get; set; }
