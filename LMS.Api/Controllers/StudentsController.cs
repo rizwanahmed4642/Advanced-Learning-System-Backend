@@ -32,9 +32,12 @@ namespace LMS.Api.Controllers
         {
             var list = await student.GetAllStudents(common);
 
-            return Ok(new ResponseSuccess
+            return Ok(new PaginatedResponseSuccess
             {
-                data = list
+                data = list,
+                PageNo = common.PageNo,
+                PageSize = common.PageSize,
+                TotalCount = list[0].TotalCount
             });
         }
         

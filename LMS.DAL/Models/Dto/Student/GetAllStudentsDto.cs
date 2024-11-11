@@ -23,5 +23,6 @@ namespace LMS.DAL.Models.Dto.Student
         public DateTime DateOfBirth { get; set; }
         public string Email { get; set; } = null;
         public string Section { get; set; } = null;
+        public int TotalCount  { get; set; } = 0;
     }
 }

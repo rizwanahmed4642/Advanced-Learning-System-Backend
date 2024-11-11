@@ -27,6 +27,19 @@ namespace CommonDTOs.ResponseDTO
             this.message = String.Empty;
         }
     }
+    
+    public class PaginatedResponseSuccess : ResponseDTO
+    {
+        public int PageNo { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public long TotalCount { get; set; } = 0;   
+        public PaginatedResponseSuccess()
+        {
+            this.statusCode = HttpStatusCode.OK;
+            this.status = true;
+            this.message = String.Empty;
+        }
+    }
 
     public class ResponseSave : ResponseDTO
     {
