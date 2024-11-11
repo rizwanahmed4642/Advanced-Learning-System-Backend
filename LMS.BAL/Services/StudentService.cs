@@ -7,6 +7,7 @@ using JWTAuthentication;
 using LMS.BAL.COMMON;
 using LMS.BAL.Interfaces;
 using LMS.DAL.Models.DbModels;
+using LMS.DAL.Models.Dto.Common;
 using LMS.DAL.Models.Dto.Student;
 using LMS.DAL.Repositories._UOW;
 using Microsoft.Data.SqlClient;
@@ -52,7 +53,7 @@ namespace LMS.BAL.Services
         #endregion
 
         #region GET
-        public async Task<List<GetAllStudentsDto>> GetAllStudents(string searchTerm)
+        public async Task<List<GetAllStudentsDto>> GetAllStudents(CommonListDto common)
         {
             using (var db = new AdvancedLearningSystemdbContext())
             {
@@ -64,7 +65,9 @@ namespace LMS.BAL.Services
                     SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
                     sqlComm.CommandType = CommandType.StoredProcedure;
                     sqlComm.Parameters.AddWithValue("@Type", "GETALL");
-                    sqlComm.Parameters.AddWithValue("@searchTerm", searchTerm);
+                    sqlComm.Parameters.AddWithValue("@searchTerm", common.searchTerm);
+                    sqlComm.Parameters.AddWithValue("@PageNumber", common.PageNo);
+                    sqlComm.Parameters.AddWithValue("@PageSize", common.PageSize);
 
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = sqlComm;
@@ -74,6 +77,40 @@ namespace LMS.BAL.Services
 
 
                     return lst;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+        
+        public async Task<ViewSingleStudentDto> GetSingleStudentForView(Guid id)
+        {
+            using (var db = new AdvancedLearningSystemdbContext())
+            {
+                var conn = _uowStudent.GetDbContext().Database.GetDbConnection();
+                try
+                {
+
+                    DataSet ds = new DataSet();
+                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
+                    sqlComm.CommandType = CommandType.StoredProcedure;
+                    sqlComm.Parameters.AddWithValue("@Type", "View");
+                    sqlComm.Parameters.AddWithValue("@Id", id);
+
+                    SqlDataAdapter da = new SqlDataAdapter();
+                    da.SelectCommand = sqlComm;
+                    await Task.Run(() => da.Fill(ds));
+                    List<ViewSingleStudentDto> lst = ds.Tables[0].ToList<ViewSingleStudentDto>();
+
+
+
+                    return lst[0];
                 }
                 catch (Exception)
                 {

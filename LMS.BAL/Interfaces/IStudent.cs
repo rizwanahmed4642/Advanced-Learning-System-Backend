@@ -1,4 +1,5 @@
-﻿using LMS.DAL.Models.Dto.Student;
+﻿using LMS.DAL.Models.Dto.Common;
+using LMS.DAL.Models.Dto.Student;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace LMS.BAL.Interfaces
     public interface IStudent
     {
         Task<CreateOrEditStudent> CreateOrEditStudentCreate(CreateOrEditStudent input);
-        Task<List<GetAllStudentsDto>> GetAllStudents(string searchTerm = null);
+        Task<List<GetAllStudentsDto>> GetAllStudents(CommonListDto common = null);
+        Task<ViewSingleStudentDto> GetSingleStudentForView(Guid id);
     }
 }

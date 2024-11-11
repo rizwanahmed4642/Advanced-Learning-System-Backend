@@ -1,5 +1,6 @@
 ﻿using CommonDTOs.ResponseDTO;
 using LMS.BAL.Interfaces;
+using LMS.DAL.Models.Dto.Common;
 using LMS.DAL.Models.Dto.Student;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,13 +28,24 @@ namespace LMS.Api.Controllers
 
         #region GET
         [HttpGet("GetAllStudents")]
-        public async Task<IActionResult> GetAllStudents([FromQuery] string? SearchTerm) 
+        public async Task<IActionResult> GetAllStudents([FromQuery] CommonListDto common) 
         {
-            var list = await student.GetAllStudents();
+            var list = await student.GetAllStudents(common);
 
             return Ok(new ResponseSuccess
             {
                 data = list
+            });
+        }
+        
+        [HttpGet("GetSingleStudentForView")]
+        public async Task<IActionResult> GetSingleStudentForView([FromQuery] Guid id) 
+        {
+            var obj = await student.GetSingleStudentForView(id);
+
+            return Ok(new ResponseSuccess
+            {
+                data = obj
             });
         }
         #endregion
