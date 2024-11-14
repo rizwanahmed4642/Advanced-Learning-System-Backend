@@ -66,14 +66,20 @@ namespace LMS.BAL.Services
                     SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
                     sqlComm.CommandType = CommandType.StoredProcedure;
                     sqlComm.Parameters.AddWithValue("@Type", "GETALL");
-                    sqlComm.Parameters.AddWithValue("@searchTerm", common.searchTerm);
+                    sqlComm.Parameters.AddWithValue("@searchByName", common.searchByName);
+                    sqlComm.Parameters.AddWithValue("@searchByClass", common.searchByClass);
+                    sqlComm.Parameters.AddWithValue("@searchByRollNo", common.searchByRollNo);
                     sqlComm.Parameters.AddWithValue("@PageNumber", common.PageNo);
                     sqlComm.Parameters.AddWithValue("@PageSize", common.PageSize);
 
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = sqlComm;
                     await Task.Run(() => da.Fill(ds));
-                    List<GetAllStudentsDto> lst = ds.Tables[0].ToList<GetAllStudentsDto>();
+                    List<GetAllStudentsDto> lst = new List<GetAllStudentsDto>();
+                    if (ds.Tables.Count > 0)
+                    {
+                        lst = ds.Tables[0].ToList<GetAllStudentsDto>();
+                    }
 
 
 
@@ -233,9 +239,39 @@ namespace LMS.BAL.Services
             }
         }
 
-        private Task<CreateOrEditStudent> Update(CreateOrEditStudent input)
+        private async Task<CreateOrEditStudent> Update(CreateOrEditStudent input)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var unitOfWorkUser = new UnitOfWork<User>();
+                var unitOfWorkUserRole = new UnitOfWork<UserRole>();
+                var userObj = await unitOfWorkUser.Repository.GetById(input.Id);
+                // Map and fill user entity
+                var user = _mapper.Map(input,userObj);
+                FillByEntityUser(user);
+
+                // Map and fill student entity
+                var studentObj = await _uowStudent.Repository.GetById(input!.StudentCreateOrEditDto!.StudentId);
+                var student = _mapper.Map(input.StudentCreateOrEditDto,studentObj);
+                FillByEntityStudent(student);
+
+                // Update user
+                unitOfWorkUser.Repository.Update(user);
+              
+
+                // Update student
+                _uowStudent.Repository.Update(student);
+
+                // Commit all changes in a transaction
+                await unitOfWorkUser.CommitAsync();
+                await _uowStudent.CommitAsync();
+                
+                return input;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException.Message);
+            }
         }
 
         private void FillByEntityUser(User input)

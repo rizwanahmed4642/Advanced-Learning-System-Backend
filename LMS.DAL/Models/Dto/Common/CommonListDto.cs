@@ -8,7 +8,9 @@ namespace LMS.DAL.Models.Dto.Common
 {
     public class CommonListDto
     {
-        public string? searchTerm { get; set; }
+        public string? searchByName { get; set; }
+        public string? searchByClass { get; set; }
+        public string? searchByRollNo { get; set; }
         public int PageNo { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }

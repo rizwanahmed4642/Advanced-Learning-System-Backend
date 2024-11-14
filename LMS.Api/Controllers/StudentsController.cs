@@ -37,7 +37,7 @@ namespace LMS.Api.Controllers
                 data = list,
                 PageNo = common.PageNo,
                 PageSize = common.PageSize,
-                TotalCount = list[0].TotalCount
+                TotalCount = list.Count > 0 ? list[0].TotalCount : 0,
             });
         }
         
