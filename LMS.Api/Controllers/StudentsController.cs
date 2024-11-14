@@ -51,6 +51,16 @@ namespace LMS.Api.Controllers
                 data = obj
             });
         }
+
+        [HttpGet("GetStudentsById")]
+        public async Task<IActionResult> GetStudentsById([FromQuery] Guid id)
+        {
+            var obj = await student.GetStudentsById(id);
+            return Ok(new ResponseSuccess
+            {
+                data = obj
+            });
+        }
         #endregion
 
         #region POST

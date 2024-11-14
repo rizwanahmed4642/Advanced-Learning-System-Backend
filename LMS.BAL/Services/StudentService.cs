@@ -18,6 +18,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
 
 namespace LMS.BAL.Services
 {
@@ -88,7 +89,41 @@ namespace LMS.BAL.Services
                 }
             }
         }
-        
+
+        public async Task<GetSingleStudentDto> GetStudentsById(Guid id)
+        {
+            using (var db = new AdvancedLearningSystemdbContext())
+            {
+                try
+                {
+                    var conn = _uowStudent.GetDbContext().Database.GetDbConnection();
+                    DataSet ds = new DataSet();
+                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
+                    sqlComm.CommandType = CommandType.StoredProcedure;
+                    sqlComm.Parameters.AddWithValue("@Type", "GETBYID");
+                    sqlComm.Parameters.AddWithValue("@Id", id);
+                    
+                    SqlDataAdapter da = new SqlDataAdapter();
+                    da.SelectCommand = sqlComm;
+                    await Task.Run(() => da.Fill(ds));
+                    List<GetSingleStudentDto> lst = ds.Tables[0].ToList<GetSingleStudentDto>();
+
+
+
+                    return lst[0];
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+
+                }
+            }
+        }
+
         public async Task<ViewSingleStudentDto> GetSingleStudentForView(Guid id)
         {
             using (var db = new AdvancedLearningSystemdbContext())
