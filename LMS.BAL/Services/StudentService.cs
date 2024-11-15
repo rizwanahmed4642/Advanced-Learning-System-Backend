@@ -184,7 +184,7 @@ namespace LMS.BAL.Services
                 await _uowStudent.CommitAsync();
                 await unitOfWorkUser.CommitAsync();
 
-                return "Student Deleted Successfully";
+                return "Student Record Deleted Successfully";
             }
             catch (Exception ex)
             {
