@@ -77,6 +77,18 @@ namespace LMS.Api.Controllers
         }
         #endregion
 
+        #region DELETE
+        [HttpPost("DELETESTUDENTRECORD")]
+        public async Task<IActionResult> DELETESTUDENTRECORD([FromQuery] Guid id)
+        {
+            var msg = await student.DELETESTUDENTRECORD(id);
+            return Ok(new ResponseDelete
+            {
+                message = msg
+            });
+        }
+        #endregion
+
         #region Helper Method
 
         #endregion

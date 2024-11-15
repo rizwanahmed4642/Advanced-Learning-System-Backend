@@ -165,6 +165,34 @@ namespace LMS.BAL.Services
         }
         #endregion
 
+        #region DELETE
+        public async Task<string> DELETESTUDENTRECORD(Guid id)
+        {
+            try
+            {
+                var unitOfWorkUser = new UnitOfWork<User>();
+                var stuObj = await _uowStudent.GetDbContext().Students.Where(x => x.UserId == id).FirstOrDefaultAsync();
+                var user = await unitOfWorkUser.Repository.GetById(id);
+                if (AppCommonMethod.IsNullObject(user) || AppCommonMethod.IsNullObject(stuObj))
+                {
+                    throw new UserFriendlyException("Student Not Found.");
+                }
+                user.ActionTypeId = (int?)ActionTypeEnum.Deleted;
+                user.IsActive = false;
+                stuObj.ActionTypeId = (int?)ActionTypeEnum.Deleted;
+                stuObj.IsActive = false;
+                await _uowStudent.CommitAsync();
+                await unitOfWorkUser.CommitAsync();
+
+                return "Student Deleted Successfully";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        #endregion
+
         #region Helper Method
         private async Task<CreateOrEditStudent> Create(CreateOrEditStudent input)
         {
