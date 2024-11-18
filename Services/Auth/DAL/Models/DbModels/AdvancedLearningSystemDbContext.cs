@@ -23,6 +23,8 @@ public partial class AdvancedLearningSystemDbContext : DbContext
 
     public virtual DbSet<Student> Students { get; set; }
 
+    public virtual DbSet<Teacher> Teachers { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
@@ -92,8 +94,22 @@ public partial class AdvancedLearningSystemDbContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.PhoneNo).HasMaxLength(20);
             entity.Property(e => e.RollNo).HasMaxLength(100);
-            entity.Property(e => e.StudentPhotoBase64).HasMaxLength(200);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Teacher>(entity =>
+        {
+            entity.Property(e => e.TeacherId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.IdNo).HasMaxLength(100);
+            entity.Property(e => e.PhoneNo).HasMaxLength(30);
+            entity.Property(e => e.Salary).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Teachers)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Teachers_User");
         });
 
         modelBuilder.Entity<User>(entity =>

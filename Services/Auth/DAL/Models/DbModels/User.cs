@@ -33,5 +33,7 @@ public partial class User
 
     public int? ActionTypeId { get; set; }
 
+    public virtual ICollection<Teacher> Teachers { get; } = new List<Teacher>();
+
     public virtual ICollection<UserRole> UserRoles { get; } = new List<UserRole>();
 }

@@ -20,6 +20,7 @@ namespace LMS.DAL.Models.DbModels
         public virtual DbSet<ProfileType> ProfileTypes { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Student> Students { get; set; } = null!;
+        public virtual DbSet<Teacher> Teachers { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
@@ -117,9 +118,28 @@ namespace LMS.DAL.Models.DbModels
 
                 entity.Property(e => e.RollNo).HasMaxLength(100);
 
-                entity.Property(e => e.StudentPhotoBase64).HasMaxLength(200);
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Teacher>(entity =>
+            {
+                entity.Property(e => e.TeacherId).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.IdNo).HasMaxLength(100);
+
+                entity.Property(e => e.PhoneNo).HasMaxLength(30);
+
+                entity.Property(e => e.Salary).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Teachers)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Teachers_User");
             });
 
             modelBuilder.Entity<User>(entity =>

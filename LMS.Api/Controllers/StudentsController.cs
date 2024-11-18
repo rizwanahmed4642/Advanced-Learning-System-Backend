@@ -28,7 +28,7 @@ namespace LMS.Api.Controllers
 
         #region GET
         [HttpGet("GetAllStudents")]
-        public async Task<IActionResult> GetAllStudents([FromQuery] CommonListDto common) 
+        public async Task<IActionResult> GetAllStudents([FromQuery] StudentListDto common) 
         {
             var list = await student.GetAllStudents(common);
 

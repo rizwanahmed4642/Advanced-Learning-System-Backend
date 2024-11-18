@@ -7,6 +7,7 @@ namespace LMS.DAL.Models.DbModels
     {
         public User()
         {
+            Teachers = new HashSet<Teacher>();
             UserRoles = new HashSet<UserRole>();
         }
 
@@ -25,6 +26,7 @@ namespace LMS.DAL.Models.DbModels
         public DateTime? UpdatedOn { get; set; }
         public int? ActionTypeId { get; set; }
 
+        public virtual ICollection<Teacher> Teachers { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

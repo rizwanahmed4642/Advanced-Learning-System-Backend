@@ -47,11 +47,13 @@ builder.Services.TryAddScoped<HttpClient>();
 builder.Services.TryAddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddScoped<IStudent, StudentService>();
+builder.Services.AddScoped<ITeacher, TeacherService>();
 
 #endregion
 
 #region UnitOfWork
 builder.Services.TryAddScoped<UnitOfWork<Student>>();
+builder.Services.TryAddScoped<UnitOfWork<Teacher>>();
 #endregion
 
 var app = builder.Build();

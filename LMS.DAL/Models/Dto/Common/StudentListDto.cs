@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LMS.DAL.Models.Dto.Common
+{
+    public class StudentListDto : PagerDto
+    {
+        public string? searchByName { get; set; }
+        public string? searchByClass { get; set; }
+        public string? searchByRollNo { get; set; }
+    }
+
+    public class TeacherListDto : PagerDto
+    {
+        public string? searchByName { get; set; }
+        public string? searchByPhoneNo { get; set; }
+        public string? searchByIDNo { get; set; }
+    }
+}

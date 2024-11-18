@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LMS.DAL.Models.Dto.Common
+namespace LMS.DAL.Models.Dto
 {
-    public class CommonListDto
+    public class PagerDto
     {
-        public string? searchByName { get; set; }
-        public string? searchByClass { get; set; }
-        public string? searchByRollNo { get; set; }
         public int PageNo { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }

@@ -11,7 +11,7 @@ namespace LMS.BAL.Interfaces
     public interface IStudent
     {
         Task<CreateOrEditStudent> CreateOrEditStudentCreate(CreateOrEditStudent input);
-        Task<List<GetAllStudentsDto>> GetAllStudents(CommonListDto common = null);
+        Task<List<GetAllStudentsDto>> GetAllStudents(StudentListDto common = null);
         Task<ViewSingleStudentDto> GetSingleStudentForView(Guid id);
         Task<GetSingleStudentDto> GetStudentsById(Guid id);
         Task<string> DELETESTUDENTRECORD(Guid id);

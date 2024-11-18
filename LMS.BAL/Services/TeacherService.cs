@@ -2,13 +2,13 @@
 using AutoMapper;
 using CommonDTOs.Enums;
 using CommonExceptionHandler;
-using CommonMessages;
 using JWTAuthentication;
 using LMS.BAL.COMMON;
 using LMS.BAL.Interfaces;
 using LMS.DAL.Models.DbModels;
 using LMS.DAL.Models.Dto.Common;
 using LMS.DAL.Models.Dto.Student;
+using LMS.DAL.Models.Dto.Teacher;
 using LMS.DAL.Repositories._UOW;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -18,34 +18,32 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Azure.Core.HttpHeader;
 
 namespace LMS.BAL.Services
 {
-    public class StudentService : IStudent
+    public class TeacherService : ITeacher
     {
-        #region Class Fields & Properties
-        private readonly UnitOfWork<Student> _uowStudent;
+        #region Class Fields & Properties 
+        private readonly UnitOfWork<Teacher> _uowTeacher;
         private IMapper _mapper;
         private readonly TokenService _tokenService;
         #endregion
 
         #region Constructor
-        public StudentService(UnitOfWork<Student> uowStudent, IMapper mapper, TokenService tokenService)
+        public TeacherService(UnitOfWork<Teacher> uowTeacher, IMapper mapper, TokenService tokenService)
         {
-            _uowStudent = uowStudent;
+            _uowTeacher = uowTeacher;
             _mapper = mapper;
             _tokenService = tokenService;
         }
         #endregion
-
-        #region POST
-        public async Task<CreateOrEditStudent> CreateOrEditStudentCreate(CreateOrEditStudent input)
+        #region CU
+        public async Task<CreateOrEditTeacherDto> CreateOrEditTeacherCreate(CreateOrEditTeacherDto input)
         {
-            if (AppCommonMethod.IsNullOrEmptyGuid(input.Id)) 
+            if (AppCommonMethod.IsNullOrEmptyGuid(input.Id))
             {
-                return await Create(input);  
-            } 
+                return await Create(input);
+            }
             else
             {
                 return await Update(input);
@@ -54,34 +52,32 @@ namespace LMS.BAL.Services
         #endregion
 
         #region GET
-        public async Task<List<GetAllStudentsDto>> GetAllStudents(StudentListDto common)
+        public async Task<List<GetAllTeacherDto>> GetAllTeachers(TeacherListDto common)
         {
             using (var db = new AdvancedLearningSystemdbContext())
             {
-                var conn = _uowStudent.GetDbContext().Database.GetDbConnection();
+                var conn = _uowTeacher.GetDbContext().Database.GetDbConnection();
                 try
                 {
 
                     DataSet ds = new DataSet();
-                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
+                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Teacher]", (SqlConnection)conn);
                     sqlComm.CommandType = CommandType.StoredProcedure;
                     sqlComm.Parameters.AddWithValue("@Type", "GETALL");
+                    sqlComm.Parameters.AddWithValue("@searchByID", common.searchByIDNo);
                     sqlComm.Parameters.AddWithValue("@searchByName", common.searchByName);
-                    sqlComm.Parameters.AddWithValue("@searchByClass", common.searchByClass);
-                    sqlComm.Parameters.AddWithValue("@searchByRollNo", common.searchByRollNo);
+                    sqlComm.Parameters.AddWithValue("@searchByPhoneNo", common.searchByPhoneNo);
                     sqlComm.Parameters.AddWithValue("@PageNumber", common.PageNo);
                     sqlComm.Parameters.AddWithValue("@PageSize", common.PageSize);
 
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = sqlComm;
                     await Task.Run(() => da.Fill(ds));
-                    List<GetAllStudentsDto> lst = new List<GetAllStudentsDto>();
+                    List<GetAllTeacherDto> lst = new List<GetAllTeacherDto>();
                     if (ds.Tables.Count > 0)
                     {
-                        lst = ds.Tables[0].ToList<GetAllStudentsDto>();
+                        lst = ds.Tables[0].ToList<GetAllTeacherDto>();
                     }
-
-
 
                     return lst;
                 }
@@ -96,23 +92,23 @@ namespace LMS.BAL.Services
             }
         }
 
-        public async Task<GetSingleStudentDto> GetStudentsById(Guid id)
+        public async Task<GetSingleTeacherDto> GetTeacherById(Guid id)
         {
             using (var db = new AdvancedLearningSystemdbContext())
             {
                 try
                 {
-                    var conn = _uowStudent.GetDbContext().Database.GetDbConnection();
+                    var conn = _uowTeacher.GetDbContext().Database.GetDbConnection();
                     DataSet ds = new DataSet();
-                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
+                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Teacher]", (SqlConnection)conn);
                     sqlComm.CommandType = CommandType.StoredProcedure;
                     sqlComm.Parameters.AddWithValue("@Type", "GETBYID");
                     sqlComm.Parameters.AddWithValue("@Id", id);
-                    
+
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = sqlComm;
                     await Task.Run(() => da.Fill(ds));
-                    List<GetSingleStudentDto> lst = ds.Tables[0].ToList<GetSingleStudentDto>();
+                    List<GetSingleTeacherDto> lst = ds.Tables[0].ToList<GetSingleTeacherDto>();
 
 
 
@@ -130,71 +126,10 @@ namespace LMS.BAL.Services
             }
         }
 
-        public async Task<ViewSingleStudentDto> GetSingleStudentForView(Guid id)
-        {
-            using (var db = new AdvancedLearningSystemdbContext())
-            {
-                var conn = _uowStudent.GetDbContext().Database.GetDbConnection();
-                try
-                {
-
-                    DataSet ds = new DataSet();
-                    SqlCommand sqlComm = new SqlCommand("[dbo].[sp_Students]", (SqlConnection)conn);
-                    sqlComm.CommandType = CommandType.StoredProcedure;
-                    sqlComm.Parameters.AddWithValue("@Type", "View");
-                    sqlComm.Parameters.AddWithValue("@Id", id);
-
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = sqlComm;
-                    await Task.Run(() => da.Fill(ds));
-                    List<ViewSingleStudentDto> lst = ds.Tables[0].ToList<ViewSingleStudentDto>();
-
-
-
-                    return lst[0];
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                finally
-                {
-                    conn.Close();
-                }
-            }
-        }
-        #endregion
-
-        #region DELETE
-        public async Task<string> DELETESTUDENTRECORD(Guid id)
-        {
-            try
-            {
-                var unitOfWorkUser = new UnitOfWork<User>();
-                var stuObj = await _uowStudent.GetDbContext().Students.Where(x => x.UserId == id).FirstOrDefaultAsync();
-                var user = await unitOfWorkUser.Repository.GetById(id);
-                if (AppCommonMethod.IsNullObject(user) || AppCommonMethod.IsNullObject(stuObj))
-                {
-                    throw new UserFriendlyException("Student Not Found.");
-                }
-                user.ActionTypeId = (int?)ActionTypeEnum.Deleted;
-                user.IsActive = false;
-                stuObj.ActionTypeId = (int?)ActionTypeEnum.Deleted;
-                stuObj.IsActive = false;
-                await _uowStudent.CommitAsync();
-                await unitOfWorkUser.CommitAsync();
-
-                return "Student Record Deleted Successfully";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
         #endregion
 
         #region Helper Method
-        private async Task<CreateOrEditStudent> Create(CreateOrEditStudent input)
+        private async Task<CreateOrEditTeacherDto> Create(CreateOrEditTeacherDto input)
         {
             try
             {
@@ -206,8 +141,8 @@ namespace LMS.BAL.Services
                 FillByEntityUser(user);
 
                 // Map and fill student entity
-                var student = _mapper.Map<Student>(input.StudentCreateOrEditDto);
-                FillByEntityStudent(student);
+                var teacher = _mapper.Map<Teacher>(input.TeacherCreateOrEditDto);
+                FillByEntityTeacher(teacher);
 
                 // Insert user
                 var userInsert = unitOfWorkUser.Repository.Insert(user);
@@ -217,11 +152,11 @@ namespace LMS.BAL.Services
                 }
 
                 // Set UserId for student
-                student.UserId = user.Id;
+                teacher.UserId = user.Id;
 
                 // Insert student
-                var studentInsert = _uowStudent.Repository.Insert(student);
-                if (studentInsert == null)
+                var teacherInsert = _uowTeacher.Repository.Insert(teacher);
+                if (teacherInsert == null)
                 {
                     throw new UserFriendlyException("Failed to add student.");
                 }
@@ -256,7 +191,7 @@ namespace LMS.BAL.Services
 
                 // Commit all changes in a transaction
                 await unitOfWorkUser.CommitAsync();
-                await _uowStudent.CommitAsync();
+                await _uowTeacher.CommitAsync();
                 await unitOfWorkUserRole.CommitAsync(); // Ensure to commit roles as well
 
                 return input;
@@ -267,7 +202,7 @@ namespace LMS.BAL.Services
             }
         }
 
-        private async Task<CreateOrEditStudent> Update(CreateOrEditStudent input)
+        private async Task<CreateOrEditTeacherDto> Update(CreateOrEditTeacherDto input)
         {
             try
             {
@@ -275,25 +210,25 @@ namespace LMS.BAL.Services
                 var unitOfWorkUserRole = new UnitOfWork<UserRole>();
                 var userObj = await unitOfWorkUser.Repository.GetById(input.Id);
                 // Map and fill user entity
-                var user = _mapper.Map(input,userObj);
+                var user = _mapper.Map(input, userObj);
                 FillByEntityUser(user);
 
                 // Map and fill student entity
-                var studentObj = await _uowStudent.Repository.GetById(input!.StudentCreateOrEditDto!.StudentId);
-                var student = _mapper.Map(input.StudentCreateOrEditDto,studentObj);
-                FillByEntityStudent(student);
+                var teacherObj = await _uowTeacher.Repository.GetById(input!.TeacherCreateOrEditDto!.TeacherId);
+                var teacher = _mapper.Map(input.TeacherCreateOrEditDto, teacherObj);
+                FillByEntityTeacher(teacher);
 
                 // Update user
                 unitOfWorkUser.Repository.Update(user);
-              
+
 
                 // Update student
-                _uowStudent.Repository.Update(student);
+                _uowTeacher.Repository.Update(teacher);
 
                 // Commit all changes in a transaction
                 await unitOfWorkUser.CommitAsync();
-                await _uowStudent.CommitAsync();
-                
+                await _uowTeacher.CommitAsync();
+
                 return input;
             }
             catch (Exception ex)
@@ -312,8 +247,8 @@ namespace LMS.BAL.Services
                 input.CreatedOn = DateTime.Now;
                 input.IsActive = true;
                 input.Password = PasswordGenerator.GeneratePassword(10, true, true, true, true);
-                input.Username = input.FirstName + Guid.NewGuid().ToString().Substring(0,8);
-            } 
+                input.Username = input.FirstName + Guid.NewGuid().ToString().Substring(0, 8);
+            }
             else
             {
                 input.ActionTypeId = (int)ActionTypeEnum.Edit;
@@ -323,11 +258,11 @@ namespace LMS.BAL.Services
             }
         }
 
-        private void FillByEntityStudent(Student input)
+        private void FillByEntityTeacher(Teacher input)
         {
-            if (AppCommonMethod.IsNullOrEmptyGuid(input.StudentId))
+            if (AppCommonMethod.IsNullOrEmptyGuid(input.TeacherId))
             {
-                input.StudentId = Guid.NewGuid();
+                input.TeacherId = Guid.NewGuid();
                 input.ActionTypeId = (int)ActionTypeEnum.Create;
                 input.CreatedBy = _tokenService.GetUserId();
                 input.CreatedOn = DateTime.Now;
