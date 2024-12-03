@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LMS.DAL.Models.Dto.Student
+namespace LMS.DAL.Models.Dto.Parent
 {
-    public class CreateOrEditStudent
+    public class CreateOrEditParent
     {
         public Guid? Id { get; set; }
         public string? FirstName { get; set; }
@@ -15,21 +15,20 @@ namespace LMS.DAL.Models.Dto.Student
         public DateTime? DateOfBirth { get; set; }
         public string? Email { get; set; }
         public string? RoleShortName { get; set; }
-        public StudentCreateOrEditDto? StudentCreateOrEditDto { get; set; }
+        public ParentCreateOrEditDto? ParentCreateOrEditDto { get; set; }
     }
 
-    public class StudentCreateOrEditDto
+    public class ParentCreateOrEditDto
     {
-        public Guid? StudentId { get; set; }
         public Guid? ParentId { get; set; }
-        public string RollNo { get; set; } = null!;
+        public string Occupation { get; set; } = null!;
+        public string Idno { get; set; } = null!;
+        public string MotherName { get; set; } = null!;
         public Guid BloodGroupTypeProfileId { get; set; }
         public Guid ReligionTypeProfileId { get; set; }
-        public Guid StudentClassTypeProfileId { get; set; }
-        public Guid StudentClassSectionTypeProfileId { get; set; }
-        public string? AdmissionId { get; set; }
-        public string? PhoneNo { get; set; }
+        public string Address { get; set; } = null!;
+        public string PhoneNo { get; set; } = null!;
         public string? ShortBio { get; set; }
-        public string? StudentPhotoBase64 { get; set; } = null!;
+        public string ParentPhotoBase64 { get; set; } = null!;
     }
 }

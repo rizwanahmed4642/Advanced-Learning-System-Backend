@@ -15,6 +15,8 @@ public partial class AdvancedLearningSystemDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Parent> Parents { get; set; }
+
     public virtual DbSet<Profile> Profiles { get; set; }
 
     public virtual DbSet<ProfileType> ProfileTypes { get; set; }
@@ -35,6 +37,25 @@ public partial class AdvancedLearningSystemDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Parent>(entity =>
+        {
+            entity.Property(e => e.ParentId).ValueGeneratedNever();
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Idno)
+                .HasMaxLength(500)
+                .HasColumnName("IDNo");
+            entity.Property(e => e.MotherName).HasMaxLength(250);
+            entity.Property(e => e.Occupation).HasMaxLength(500);
+            entity.Property(e => e.PhoneNo).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Father).WithMany(p => p.Parents)
+                .HasForeignKey(d => d.FatherId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Parents_User");
+        });
+
         modelBuilder.Entity<Profile>(entity =>
         {
             entity.ToTable("Profile");

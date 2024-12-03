@@ -3,31 +3,29 @@ using System.Collections.Generic;
 
 namespace Auth.DAL.Models.DbModels;
 
-public partial class Student
+public partial class Parent
 {
-    public Guid StudentId { get; set; }
+    public Guid ParentId { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid FatherId { get; set; }
 
-    public Guid? ParentId { get; set; }
+    public string MotherName { get; set; } = null!;
 
-    public string RollNo { get; set; } = null!;
+    public string Occupation { get; set; } = null!;
+
+    public string Idno { get; set; } = null!;
 
     public Guid BloodGroupTypeProfileId { get; set; }
 
     public Guid ReligionTypeProfileId { get; set; }
 
-    public Guid StudentClassTypeProfileId { get; set; }
+    public string Address { get; set; } = null!;
 
-    public Guid StudentClassSectionTypeProfileId { get; set; }
-
-    public string? AdmissionId { get; set; }
-
-    public string? PhoneNo { get; set; }
+    public string PhoneNo { get; set; } = null!;
 
     public string? ShortBio { get; set; }
 
-    public string? StudentPhotoBase64 { get; set; }
+    public string ParentPhotoBase64 { get; set; } = null!;
 
     public bool? IsActive { get; set; }
 
@@ -40,4 +38,6 @@ public partial class Student
     public DateTime? UpdatedOn { get; set; }
 
     public int? ActionTypeId { get; set; }
+
+    public virtual User Father { get; set; } = null!;
 }

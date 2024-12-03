@@ -16,6 +16,8 @@ namespace LMS.DAL.Models.Dto.Student
         public string StudentPhotoBase64 { get; set; } = null;
         public string Username { get; set; } = null;
         public string FullName { get; set; } = null;
+        public string FatherName { get; set; } = null;
+        public string Address { get; set; } = null;
         public string Gender { get; set; } = null;
         public string BloodGroup { get; set; } = null;
         public string Religion { get; set; } = null;

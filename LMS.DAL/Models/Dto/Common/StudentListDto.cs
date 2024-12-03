@@ -19,4 +19,11 @@ namespace LMS.DAL.Models.Dto.Common
         public string? searchByPhoneNo { get; set; }
         public string? searchByIDNo { get; set; }
     }
+
+    public class ParentListDto : PagerDto
+    {
+        public string? searchByIdNo { get; set; }
+        public string? searchByName { get; set; }
+        public string? searchByPhoneNo { get; set; }
+    }
 }
