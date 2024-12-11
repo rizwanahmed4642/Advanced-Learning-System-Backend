@@ -17,6 +17,7 @@ namespace LMS.DAL.Models.Dto.Student
         public DateTime? CreatedOn { get; set; }
         public string? Email { get; set; }
         public Guid? StudentId { get; set; }
+        public Guid? ParentId { get; set; }
         public string RollNo { get; set; } = null!;
         public Guid BloodGroupTypeProfileId { get; set; }
         public Guid ReligionTypeProfileId { get; set; }
