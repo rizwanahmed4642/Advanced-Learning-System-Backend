@@ -49,13 +49,14 @@ builder.Services.TryAddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IStudent, StudentService>();
 builder.Services.AddScoped<ITeacher, TeacherService>();
 builder.Services.AddScoped<IParent, ParentService>();
-
+builder.Services.AddScoped<ILibrary, LibraryService>();
 #endregion
 
 #region UnitOfWork
 builder.Services.TryAddScoped<UnitOfWork<Student>>();
 builder.Services.TryAddScoped<UnitOfWork<Teacher>>();
 builder.Services.TryAddScoped<UnitOfWork<Parent>>();
+builder.Services.TryAddScoped<UnitOfWork<Library>>();
 #endregion
 
 var app = builder.Build();

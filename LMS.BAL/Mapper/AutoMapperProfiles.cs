@@ -1,4 +1,5 @@
 ﻿using LMS.DAL.Models.DbModels;
+using LMS.DAL.Models.Dto.Library;
 using LMS.DAL.Models.Dto.Parent;
 using LMS.DAL.Models.Dto.Student;
 using LMS.DAL.Models.Dto.Teacher;
@@ -37,6 +38,13 @@ namespace LMS.BAL.Mapper
             {
                 CreateMap<User, CreateOrEditParent>().ReverseMap();
                 CreateMap<Parent, ParentCreateOrEditDto>().ReverseMap();
+            }
+        }
+        public class LibraryProfile : AutoMapper.Profile 
+        {
+            public LibraryProfile()
+            {
+                CreateMap<Library, CreateOrEditLibrary>().ReverseMap();
             }
         }
         #endregion

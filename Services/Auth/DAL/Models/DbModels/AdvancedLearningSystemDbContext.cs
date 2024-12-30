@@ -15,6 +15,8 @@ public partial class AdvancedLearningSystemDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Library> Libraries { get; set; }
+
     public virtual DbSet<Parent> Parents { get; set; }
 
     public virtual DbSet<Profile> Profiles { get; set; }
@@ -37,6 +39,20 @@ public partial class AdvancedLearningSystemDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Library>(entity =>
+        {
+            entity.ToTable("Library");
+
+            entity.Property(e => e.LibraryId).ValueGeneratedNever();
+            entity.Property(e => e.BookName).HasMaxLength(250);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.IdNo).HasMaxLength(250);
+            entity.Property(e => e.PublishingDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UploadDate).HasColumnType("datetime");
+            entity.Property(e => e.WriterName).HasMaxLength(250);
+        });
+
         modelBuilder.Entity<Parent>(entity =>
         {
             entity.Property(e => e.ParentId).ValueGeneratedNever();
